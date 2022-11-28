@@ -1,4 +1,3 @@
-var t;
 function App() {
     return (
         <div className="App">
@@ -6,6 +5,5 @@ function App() {
         </div>
     );
 }
-console.log('teresa');
 
 export default App;
