@@ -1,9 +1,11 @@
-name: Deploy papilene
+name: Papilene Basic
 
 on:
     push:
-        branches:
-            - main
+        branches: [main]
+    pull_request:
+        branches: [main]
+        types: [opened, synchronize]
 
 jobs:
     hello_word:
@@ -16,7 +18,10 @@ jobs:
               with:
                   node-version: 16
             - name: Install Dependecies
-              run: npm install --no-audit --no-found --no-optional
+              run: npm ci
+            - name: Build
+              if: ${{ github.event_name == 'push' }}
+              run: npm run build
             - name: Run linter
               run: npm run lint:check
             - name: Testing
