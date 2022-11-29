@@ -1,5 +1,5 @@
 {
-    "name": "full-config",
+    "name": "full-config-v.2.0",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -12,7 +12,8 @@
         "lint:check": "npm run lint",
         "test": "vitest",
         "test:e2e": "npx cypress run",
-        "cypress:open": "npx cypress run"
+        "cypress:open": "npx cypress run",
+        "prettier": "npx prettier --write"
     },
     "dependencies": {
         "react": "^18.2.0",
@@ -45,6 +46,9 @@
         "vitest": "^0.25.3"
     },
     "lint-staged": {
-        "*.(ts|tsx)": "npm run lint:check"
+        "*.(ts|tsx)": [
+            "npm run prettier",
+            "npm run lint:check"
+        ]
     }
 }
