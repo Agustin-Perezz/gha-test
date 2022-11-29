@@ -1,4 +1,4 @@
-name: Papilene Basic
+name: Pipeline Basic
 
 on:
     push:
@@ -8,7 +8,15 @@ on:
         types: [opened, synchronize]
 
 jobs:
-    hello_word:
+    avoid_reduncy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Cancel Previous Runs
+              uses: styfle/cancel-workflow-action@0.9.1
+              with:
+                  access_token: ${{ github.token }}
+
+    build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -22,13 +30,84 @@ jobs:
             - name: Build
               if: ${{ github.event_name == 'push' }}
               run: npm run build
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: dist
+                  path: dist
+
+    linter:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+            - name: Install Dependecies
+              run: npm ci
             - name: Run linter
               run: npm run lint:check
+
+    test:
+        needs: [lint, build]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+            - name: Install Dependecies
+              run: npm ci
+            - uses: actions/download-artifact@v2
+              with:
+                  name: dist
+                  path: dist
             - name: Testing
               run: npm run test
+
+    e2e:
+        needs: [lint, build]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+            - name: Install Dependecies
+              run: npm ci
+            - uses: actions/download-artifact@v2
+              with:
+                  name: dist
+                  path: dist
             - name: Cypress run
               uses: cypress-io/github-action@v4
               with:
                   command: npm run cypress:open
                   start: npm run dev
                   wait-on: http://localhost:5173/
+
+    deploy:
+        needs: [test, e2e]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+            - name: Install Dependencies
+              run: npm ci
+            - uses: actions/download-artifact@v2
+              with:
+                  name: dist
+                  path: dist
+            - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: dist
