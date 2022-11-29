@@ -10,7 +10,9 @@
         "prepare": "husky install",
         "lint": "eslint --ignore-path .gitignore . --ext .ts,.tsx",
         "lint:check": "npm run lint",
-        "test": "vitest"
+        "test": "vitest",
+        "test:e2e": "npx cypress run",
+        "cypress:open": "cypress open"
     },
     "dependencies": {
         "react": "^18.2.0",
