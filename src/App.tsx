@@ -1,8 +1,8 @@
 function App() {
     return (
         <div className="App">
-            <h2>test</h2>
-            <h3>coscu</h3>
+            <h2>This is a simple template</h2>
+            <p>GitHub Actions</p>
         </div>
     );
 }
