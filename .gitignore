@@ -8,6 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+cypress/videos
+cypress/plugins
+cypress/support
 dist
 dist-ssr
 *.local

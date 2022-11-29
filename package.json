@@ -12,7 +12,7 @@
         "lint:check": "npm run lint",
         "test": "vitest",
         "test:e2e": "npx cypress run",
-        "cypress:open": "cypress open"
+        "cypress:open": "npx cypress run"
     },
     "dependencies": {
         "react": "^18.2.0",

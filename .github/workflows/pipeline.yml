@@ -21,3 +21,9 @@ jobs:
               run: npm run lint:check
             - name: Testing
               run: npm run test
+            - name: Cypress run
+              uses: cypress-io/github-action@v4
+              with:
+                  command: npm run cypress:open
+                  start: npm run dev
+                  wait-on: http://localhost:5173/
